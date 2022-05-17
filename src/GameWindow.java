@@ -5,6 +5,8 @@ public class GameWindow extends JFrame {
     private World world;
     private JPanel gui;
 
+    private int turnCounter = 0;
+
     GameWindow() {
         this.setTitle("virtualWorld- Jakub Kwidziński 188647");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,6 +24,7 @@ public class GameWindow extends JFrame {
         gui.setBackground(new Color(35, 158, 213));
         JButton nextTurn = new JButton();
         nextTurn.setText("Next turn");
+        nextTurn.setFont(new Font("Helvetica", Font.PLAIN, 12));
         nextTurn.setFocusable(false);
         nextTurn.setPreferredSize(new Dimension(100, 40));
         gui.add(nextTurn);
@@ -33,25 +36,26 @@ public class GameWindow extends JFrame {
         this.revalidate();
     }
 
-    public void startGame() {
+    public void askWorldSize() {
         JPanel worldSizeQuery = new JPanel();
         worldSizeQuery.setPreferredSize(new Dimension(200, 100));
         worldSizeQuery.setBackground(Color.green);
         worldSizeQuery.setOpaque(true);
 
         JLabel infoText = new JLabel("Enter width and height of the world");
-        infoText.setFont(new Font("Serif", Font.PLAIN, 10));
+        infoText.setFont(new Font("Helvetica", Font.PLAIN, 10));
         worldSizeQuery.add(infoText);
 
-        JTextField widthField = new JTextField();
-        widthField.setPreferredSize(new Dimension(100, 20));
+        JTextField widthField = new JTextField("20");
+        widthField.setPreferredSize(new Dimension(50, 20));
         worldSizeQuery.add(widthField);
 
-        JTextField heightField = new JTextField();
-        heightField.setPreferredSize(new Dimension(100, 20));
+        JTextField heightField = new JTextField("20");
+        heightField.setPreferredSize(new Dimension(50, 20));
         worldSizeQuery.add(heightField);
 
         JButton submit = new JButton("Submit");
+        submit.setFont(new Font("Helvetica", Font.PLAIN, 15));
         submit.setPreferredSize(new Dimension(100, 20));
         submit.setFocusable(false);
         submit.addActionListener(actionEvent -> {
@@ -60,9 +64,14 @@ public class GameWindow extends JFrame {
                 width = Integer.parseInt(widthField.getText());
                 height = Integer.parseInt(heightField.getText());
             } catch (NumberFormatException nfe) {
+                JLabel badInputText = new JLabel("Please enter integers.");
+                badInputText.setFont(new Font("Helvetica", Font.PLAIN, 10));
+                worldSizeQuery.add(badInputText);
+                worldSizeQuery.repaint();
+                worldSizeQuery.revalidate();
                 return;
             }
-            System.out.println("wpisane: " + width + " " + height);
+            world.createGrid(width, height);
             worldSizeQuery.remove(widthField);
             worldSizeQuery.remove(heightField);
             worldSizeQuery.remove(submit);
@@ -76,4 +85,15 @@ public class GameWindow extends JFrame {
         gui.revalidate();
     }
 
+    private void draw(){
+
+    }
+
+    public void startGame(){
+        boolean running = true;
+        while(running){
+            turnCounter++;
+            draw();
+        }
+    }
 }

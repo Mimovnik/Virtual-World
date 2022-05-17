@@ -55,7 +55,14 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.VirtualWorld">
+    <configuration name="ListJavaFonts" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ListJavaFonts" />
+      <module name="virtualWorld" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="VirtualWorld" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="VirtualWorld" />
       <module name="virtualWorld" />
@@ -66,6 +73,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.VirtualWorld" />
+        <item itemvalue="Application.ListJavaFonts" />
       </list>
     </recent_temporary>
   </component>
