@@ -6,10 +6,9 @@ public class World {
     private Organism[] organisms;
     World(){
         terrain = new JPanel();
-        terrain.setBounds(0,0,500, 500);
+        terrain.setPreferredSize(new Dimension(500, 500));
         terrain.setBackground(new Color(255,202,103));
     }
-
     JPanel getTerrain(){
         return terrain;
     }
