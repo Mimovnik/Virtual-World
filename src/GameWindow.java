@@ -1,9 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 public class GameWindow extends JFrame {
     private World world;
+    private JButton nextTurnButton;
     private JPanel gui;
+
+    private JPanel terrain;
 
     private int turnCounter = 0;
 
@@ -16,18 +20,22 @@ public class GameWindow extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
 
-        world = new World();
-        this.add(world.getTerrain(), BorderLayout.NORTH);
+        terrain = new JPanel();
+        terrain.setPreferredSize(new Dimension(500, 500));
+        terrain.setBackground(new Color(255, 202, 103));
+        this.add(terrain, BorderLayout.NORTH);
+
         gui = new JPanel();
         gui.setLayout(new FlowLayout(FlowLayout.CENTER));
         gui.setPreferredSize(new Dimension(500, 100));
         gui.setBackground(new Color(35, 158, 213));
-        JButton nextTurn = new JButton();
-        nextTurn.setText("Next turn");
-        nextTurn.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        nextTurn.setFocusable(false);
-        nextTurn.setPreferredSize(new Dimension(100, 40));
-        gui.add(nextTurn);
+        nextTurnButton = new JButton();
+        nextTurnButton.setEnabled(false);
+        nextTurnButton.setText("Next turn");
+        nextTurnButton.setFont(new Font("Helvetica", Font.PLAIN, 12));
+        nextTurnButton.setFocusable(false);
+        nextTurnButton.setPreferredSize(new Dimension(100, 40));
+        gui.add(nextTurnButton);
         this.add(gui, BorderLayout.SOUTH);
 
         ImageIcon icon = new ImageIcon("earthIcon.png");
@@ -36,7 +44,15 @@ public class GameWindow extends JFrame {
         this.revalidate();
     }
 
-    public void askWorldSize() {
+    private void createGrid(int width, int height) {
+        int gap = Integer.min(100 / height, 100 / width);
+        GridLayout gridLayout = new GridLayout(height, width, gap, gap);
+        this.terrain.setLayout(gridLayout);
+        this.terrain.repaint();
+        this.terrain.revalidate();
+    }
+
+    public void initialize() {
         JPanel worldSizeQuery = new JPanel();
         worldSizeQuery.setPreferredSize(new Dimension(200, 100));
         worldSizeQuery.setBackground(Color.green);
@@ -71,13 +87,22 @@ public class GameWindow extends JFrame {
                 worldSizeQuery.revalidate();
                 return;
             }
-            world.createGrid(width, height);
+            createGrid(width, height);
+            world = new World(width, height);
+            world.renderCells(terrain);
             worldSizeQuery.remove(widthField);
             worldSizeQuery.remove(heightField);
             worldSizeQuery.remove(submit);
             gui.remove(worldSizeQuery);
             gui.repaint();
             gui.revalidate();
+            nextTurnButton.setEnabled(true);
+            nextTurnButton.addActionListener(actionEvent1 -> {
+                nextTurnButton.setEnabled(false);
+                startTurn();
+                nextTurnButton.setEnabled(true);
+            });
+
         });
         worldSizeQuery.add(submit);
         gui.add(worldSizeQuery);
@@ -85,15 +110,19 @@ public class GameWindow extends JFrame {
         gui.revalidate();
     }
 
-    private void draw(){
-
+    private void draw() {
+        world.renderCells(terrain);
+        repaint();
+        revalidate();
     }
 
-    public void startGame(){
-        boolean running = true;
-        while(running){
+    public void startTurn() {
             turnCounter++;
             draw();
-        }
+            try{
+                TimeUnit.SECONDS.sleep(2);
+            }catch(Exception e){
+                System.err.println(e);
+            }
     }
 }
