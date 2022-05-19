@@ -120,7 +120,7 @@ public class GameWindow extends JFrame {
             turnCounter++;
             draw();
             try{
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(1);
             }catch(Exception e){
                 System.err.println(e);
             }

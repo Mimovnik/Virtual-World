@@ -1,9 +1,65 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Organism {
-    private JLabel skin;
+    protected JLabel skin;
+    protected int strength;
+    protected int initiative;
+    protected Position current;
+    protected Position last;
+    protected int birthDate;
+    protected String name;
+    protected World world;
+    protected boolean stunned;
+    protected boolean dead;
+    protected static int counter = 0;
 
-    Organism(){
+    protected void collide(Organism defender) {
 
     }
+
+    protected void takeHit(Organism attacker) {
+
+    }
+
+    protected  void setSkin(JLabel skin){
+        this.skin = skin;
+    }
+
+    public Organism() {
+        stunned = false;
+        dead = false;
+        current = new Position();
+        last = new Position(current);
+    }
+
+    public Organism(World world, int strength, int initiative, String name) {
+        counter++;
+        this.name = name;
+        this.stunned = false;
+        this.dead   = false;
+        this.world = world;
+        this.strength = strength;
+        this.initiative = initiative;
+        this.current = world.getRandomEmptyPos();
+        this.last = new Position(current);
+        this.birthDate = counter;
+    }
+
+    public boolean isStronger(Organism other) {
+        return strength >= other.strength;
+    }
+
+    public void moveBack() {
+        current = new Position(last);
+    }
+
+    public Position getPos(){
+        return current;
+    }
+
+    public JLabel getSkin(){
+        return skin;
+    }
+
 }

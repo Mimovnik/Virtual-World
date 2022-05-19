@@ -1,7 +1,11 @@
 
 public class VirtualWorld {
     public static void main(String[] args) {
-        GameWindow gameWindow = new GameWindow();
-        gameWindow.initialize();
+        try {
+            GameWindow gameWindow = new GameWindow();
+            gameWindow.initialize();
+        } catch(Exception e){
+            System.err.println(e);
+        }
     }
 }
