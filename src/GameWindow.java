@@ -6,9 +6,8 @@ public class GameWindow extends JFrame {
     private World world;
     private JButton nextTurnButton;
     private JPanel gui;
-
+    private JLabel turnCounterDisplay;
     private JPanel terrain;
-
     private int turnCounter = 0;
 
     GameWindow() {
@@ -94,6 +93,16 @@ public class GameWindow extends JFrame {
             worldSizeQuery.remove(heightField);
             worldSizeQuery.remove(submit);
             gui.remove(worldSizeQuery);
+
+            turnCounterDisplay = new JLabel();
+            turnCounterDisplay.setBackground(Color.white);
+            turnCounterDisplay.setOpaque(true);
+            turnCounterDisplay.setText("0");
+            turnCounterDisplay.setFont(new Font("Noto Sans", Font.PLAIN, 20));
+            turnCounterDisplay.setHorizontalAlignment(JLabel.CENTER);
+            turnCounterDisplay.setPreferredSize(new Dimension(20,20));
+            gui.add(turnCounterDisplay);
+
             gui.repaint();
             gui.revalidate();
             nextTurnButton.setEnabled(true);
@@ -110,6 +119,11 @@ public class GameWindow extends JFrame {
         gui.revalidate();
     }
 
+    private void updateTurnCounter() {
+        turnCounter++;
+        turnCounterDisplay.setText(Integer.toString(turnCounter));
+    }
+
     private void draw() {
         world.renderCells(terrain);
         repaint();
@@ -117,8 +131,7 @@ public class GameWindow extends JFrame {
     }
 
     public void startTurn() {
-        turnCounter++;
-
+        updateTurnCounter();
         world.makeTurns();
         draw();
         try {
