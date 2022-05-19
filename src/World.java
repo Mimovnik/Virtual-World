@@ -62,7 +62,9 @@ public class World {
     }
 
     public void makeTurns() {
-
+        for(int i = 0; i < organisms.size(); i++){
+            organisms.elementAt(i).action();
+        }
     }
 
     public Position getRandomEmptyPos() {
@@ -94,5 +96,13 @@ public class World {
             cells[i].setHorizontalAlignment(JLabel.CENTER);
             terrain.add(cells[i]);
         }
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
     }
 }

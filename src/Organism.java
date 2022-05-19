@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Organism {
+public abstract class Organism {
     protected JLabel skin;
     protected int strength;
     protected int initiative;
@@ -14,13 +14,19 @@ public class Organism {
     protected boolean dead;
     protected static int counter = 0;
 
+    protected enum direction{
+        NOWHERE,
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
+    }
+
     protected void collide(Organism defender) {
 
     }
 
-    protected void takeHit(Organism attacker) {
-
-    }
+    protected abstract void takeHit(Organism attacker);
 
     protected  void setSkin(JLabel skin){
         this.skin = skin;
@@ -46,6 +52,7 @@ public class Organism {
         this.birthDate = counter;
     }
 
+    public abstract void action();
     public boolean isStronger(Organism other) {
         return strength >= other.strength;
     }

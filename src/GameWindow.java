@@ -117,12 +117,14 @@ public class GameWindow extends JFrame {
     }
 
     public void startTurn() {
-            turnCounter++;
-            draw();
-            try{
-                TimeUnit.SECONDS.sleep(1);
-            }catch(Exception e){
-                System.err.println(e);
-            }
+        turnCounter++;
+
+        world.makeTurns();
+        draw();
+        try {
+//            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 }
