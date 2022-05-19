@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
 
 public class GameWindow extends JFrame {
     private World world;
@@ -100,7 +99,7 @@ public class GameWindow extends JFrame {
             turnCounterDisplay.setText("0");
             turnCounterDisplay.setFont(new Font("Noto Sans", Font.PLAIN, 20));
             turnCounterDisplay.setHorizontalAlignment(JLabel.CENTER);
-            turnCounterDisplay.setPreferredSize(new Dimension(20,20));
+            turnCounterDisplay.setPreferredSize(new Dimension(50,20));
             gui.add(turnCounterDisplay);
 
             gui.repaint();
@@ -132,12 +131,8 @@ public class GameWindow extends JFrame {
 
     public void startTurn() {
         updateTurnCounter();
+        draw();
         world.makeTurns();
         draw();
-        try {
-//            TimeUnit.SECONDS.sleep(1);
-        } catch (Exception e) {
-            System.err.println(e);
-        }
     }
 }
