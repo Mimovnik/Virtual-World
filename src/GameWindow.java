@@ -5,6 +5,7 @@ public class GameWindow extends JFrame {
     private World world;
     private JButton nextTurnButton;
     private JPanel gui;
+    private JPanel combatLog;
     private JLabel turnCounterDisplay;
     private JPanel terrain;
     private int turnCounter = 0;
@@ -12,20 +13,20 @@ public class GameWindow extends JFrame {
     GameWindow() {
         this.setTitle("virtualWorld- Jakub Kwidziński 188647");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(500, 629);
+        this.setSize(701, 629);
         this.setVisible(true);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
 
         terrain = new JPanel();
         terrain.setPreferredSize(new Dimension(500, 500));
         terrain.setBackground(new Color(255, 202, 103));
-        this.add(terrain, BorderLayout.NORTH);
+        this.add(terrain, BorderLayout.WEST);
 
         gui = new JPanel();
         gui.setLayout(new FlowLayout(FlowLayout.CENTER));
-        gui.setPreferredSize(new Dimension(500, 100));
+        gui.setPreferredSize(new Dimension(700, 100));
         gui.setBackground(new Color(35, 158, 213));
         nextTurnButton = new JButton();
         nextTurnButton.setEnabled(false);
@@ -35,6 +36,22 @@ public class GameWindow extends JFrame {
         nextTurnButton.setPreferredSize(new Dimension(100, 40));
         gui.add(nextTurnButton);
         this.add(gui, BorderLayout.SOUTH);
+
+        combatLog = new JPanel();
+        combatLog.setLayout(new FlowLayout(FlowLayout.CENTER));
+        combatLog.setPreferredSize(new Dimension(200, 20000));
+        combatLog.setBackground(new Color(203, 203, 203));
+
+        JLabel header = new JLabel("Combat log:");
+        header.setPreferredSize(new Dimension(100, 40));
+        header.setFont(new Font("Noto Sans", Font.PLAIN, 14));
+        combatLog.add(header);
+
+        JScrollPane scrollPane = new JScrollPane(combatLog);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setWheelScrollingEnabled(true);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(5);
+        this.add(scrollPane, BorderLayout.EAST);
 
         ImageIcon icon = new ImageIcon("earthIcon.png");
         this.setIconImage(icon.getImage());
@@ -53,7 +70,7 @@ public class GameWindow extends JFrame {
     public void initialize() {
         JPanel worldSizeQuery = new JPanel();
         worldSizeQuery.setPreferredSize(new Dimension(200, 100));
-        worldSizeQuery.setBackground(Color.green);
+        worldSizeQuery.setBackground(new Color(45, 109, 181));
         worldSizeQuery.setOpaque(true);
 
         JLabel infoText = new JLabel("Enter width and height of the world");
@@ -99,7 +116,7 @@ public class GameWindow extends JFrame {
             turnCounterDisplay.setText("0");
             turnCounterDisplay.setFont(new Font("Noto Sans", Font.PLAIN, 20));
             turnCounterDisplay.setHorizontalAlignment(JLabel.CENTER);
-            turnCounterDisplay.setPreferredSize(new Dimension(50,20));
+            turnCounterDisplay.setPreferredSize(new Dimension(50, 20));
             gui.add(turnCounterDisplay);
 
             gui.repaint();
@@ -123,7 +140,7 @@ public class GameWindow extends JFrame {
         turnCounterDisplay.setText(Integer.toString(turnCounter));
     }
 
-    private void draw(){
+    private void draw() {
         world.draw(terrain);
     }
 
