@@ -39,6 +39,14 @@ public abstract class Organism {
         last = new Position(current);
     }
 
+    public int compareTo(Organism other){
+        if (initiative != other.initiative) {
+            if (initiative > other.initiative) return 1;
+            else return 0;
+        }
+        if (birthDate < other.birthDate) return 1;
+        else return 0;
+    }
     public Organism(World world, int strength, int initiative, String name) {
         counter++;
         this.name = name;

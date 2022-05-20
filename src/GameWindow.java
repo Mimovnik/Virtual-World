@@ -123,16 +123,14 @@ public class GameWindow extends JFrame {
         turnCounterDisplay.setText(Integer.toString(turnCounter));
     }
 
-    private void draw() {
-        world.renderCells(terrain);
-        repaint();
-        revalidate();
+    private void draw(){
+        world.draw(terrain);
     }
 
     public void startTurn() {
         updateTurnCounter();
         draw();
-        world.makeTurns();
+        world.makeActions(terrain);
         draw();
     }
 }

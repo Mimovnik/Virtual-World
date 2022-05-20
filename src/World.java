@@ -1,6 +1,10 @@
+import javax.lang.model.util.Elements;
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.random;
 
@@ -59,9 +63,9 @@ public class World {
 
         organisms = new Vector<>();
         organisms.addElement(new Human(this));
-        for(int i = 0; i <organismsNumber; i++){
+        for (int i = 0; i < organismsNumber; i++) {
             int whichOne = (int) (random() * 10);
-            switch(whichOne){
+            switch (whichOne) {
                 case 0:
                     organisms.addElement(new Antelope(this));
                     break;
@@ -96,14 +100,35 @@ public class World {
         }
     }
 
-    public void makeTurns() {
-        for(int i = 0; i < organisms.size(); i++){
+    public void draw(JPanel terrain) {
+        renderCells(terrain);
+        terrain.repaint();
+        terrain.revalidate();
+    }
+    private void sortOrganisms() {
+        Collections.sort(organisms, (left, right) -> {
+            if (left.initiative != right.initiative) {
+                return right.initiative - left.initiative;
+            }
+            return left.birthDate - right.birthDate;
+        });
+    }
+
+    public void makeActions(JPanel terrain) {
+        sortOrganisms();
+        for (int i = 0; i < organisms.size(); i++) {
             organisms.elementAt(i).action();
+            draw(terrain);
+            try {
+                TimeUnit.MILLISECONDS.sleep(0);
+            } catch (Exception e) {
+                System.err.println(e);
+            }
         }
     }
 
     public Position getRandomEmptyPos() {
-        if(organisms.size() >= width * height){
+        if (organisms.size() >= width * height) {
             throw new RuntimeException("Couldn't find random empty position due to full world");
         }
         Position pos = new Position((int) (random() * width), (int) (random() * height));
@@ -125,7 +150,7 @@ public class World {
         for (int i = 0; i < cells.length; i++) {
             cells[i].setFont(new Font("Noto Sans", Font.BOLD,
                     Integer.min((500 - gridLayout.getColumns() * gridLayout.getHgap()) / gridLayout.getColumns(),
-                            (500 - gridLayout.getRows() * gridLayout.getVgap()) / gridLayout.getRows())-2));
+                            (500 - gridLayout.getRows() * gridLayout.getVgap()) / gridLayout.getRows()) - 2));
             cells[i].setForeground(Color.white);
             cells[i].setOpaque(true);
             cells[i].setHorizontalAlignment(JLabel.CENTER);
@@ -137,7 +162,7 @@ public class World {
         return width;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return height;
     }
 }
