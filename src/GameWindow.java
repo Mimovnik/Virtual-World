@@ -4,8 +4,8 @@ import java.awt.*;
 public class GameWindow extends JFrame {
     private World world;
     private JButton nextTurnButton;
-    private JPanel gui;
-    private JPanel combatLog;
+    public JPanel gui;
+    public JPanel combatLog;
     private JLabel turnCounterDisplay;
     private JPanel terrain;
     private int turnCounter = 0;
@@ -105,7 +105,7 @@ public class GameWindow extends JFrame {
                 return;
             }
             createGrid(width, height);
-            world = new World(width, height, combatLog);
+            world = new World(width, height, this);
             world.renderCells(terrain);
             worldSizeQuery.remove(widthField);
             worldSizeQuery.remove(heightField);

@@ -1,61 +1,20 @@
-import javax.lang.model.util.Elements;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.random;
 
 public class World {
-    private int width, height;
+    private final int width;
+    private final int height;
     private Vector<Organism> organisms;
     private JLabel[] cells;
 
-    public JPanel combatLog;
-    private JLabel getCell(int x, int y) {
-        if (x > width || x < 0) {
-            throw new RuntimeException("Bad x coordinate in getCell()");
-        }
-        if (y > height || y < 0) {
-            throw new RuntimeException("Bad y coordinate in getCell()");
-        }
-        return cells[y * width + x];
-    }
-
-    private JLabel getCell(Position position) {
-        if (position.getX() > width || position.getX() < 0) {
-            throw new RuntimeException("Bad x coordinate in getCell()");
-        }
-        if (position.getY() > height || position.getY() < 0) {
-            throw new RuntimeException("Bad y coordinate in getCell()");
-        }
-        return cells[position.getY() * width + position.getX()];
-    }
-
-    private void stampOrganismsOnCells() {
-        for (int i = 0; i < organisms.size(); i++) {
-            Position pos = organisms.elementAt(i).getPos();
-            cells[pos.getY() * width + pos.getX()] = organisms.elementAt(i).getSkin();
-            cells[pos.getY() * width + pos.getX()].setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        }
-    }
-
-    private void wipeCells() {
-        for (int i = 0; i < cells.length; i++) {
-            cells[i] = new JLabel();
-            cells[i].setBackground(Color.lightGray);
-            cells[i].setForeground(Color.white);
-            cells[i].setOpaque(true);
-            cells[i].setHorizontalAlignment(JLabel.CENTER);
-        }
-    }
-
-    public World(int width, int height, JPanel combatLog) {
+    public GameWindow window;
+    public World(int width, int height, GameWindow window) {
         this.width = width;
         this.height = height;
-        this.combatLog = combatLog;
+        this.window = window;
 
         cells = new JLabel[width * height];
         wipeCells();
@@ -102,6 +61,44 @@ public class World {
             }
         }
     }
+    private JLabel getCell(int x, int y) {
+        if (x > width || x < 0) {
+            throw new RuntimeException("Bad x coordinate in getCell()");
+        }
+        if (y > height || y < 0) {
+            throw new RuntimeException("Bad y coordinate in getCell()");
+        }
+        return cells[y * width + x];
+    }
+
+    private JLabel getCell(Position position) {
+        if (position.getX() > width || position.getX() < 0) {
+            throw new RuntimeException("Bad x coordinate in getCell()");
+        }
+        if (position.getY() > height || position.getY() < 0) {
+            throw new RuntimeException("Bad y coordinate in getCell()");
+        }
+        return cells[position.getY() * width + position.getX()];
+    }
+
+    private void stampOrganismsOnCells() {
+        for (int i = 0; i < organisms.size(); i++) {
+            Position pos = organisms.elementAt(i).getPos();
+            cells[pos.getY() * width + pos.getX()] = organisms.elementAt(i).getSkin();
+            cells[pos.getY() * width + pos.getX()].setBorder(BorderFactory.createLineBorder(Color.black, 1));
+        }
+    }
+
+    private void wipeCells() {
+        for (int i = 0; i < cells.length; i++) {
+            cells[i] = new JLabel();
+            cells[i].setBackground(Color.lightGray);
+            cells[i].setForeground(Color.white);
+            cells[i].setOpaque(true);
+            cells[i].setHorizontalAlignment(JLabel.CENTER);
+        }
+    }
+
     public void draw(JPanel terrain) {
         renderCells(terrain);
         terrain.repaint();
@@ -115,7 +112,7 @@ public class World {
             entry.setOpaque(true);
             entry.setBackground(color);
         }
-        combatLog.add(entry);
+        window.combatLog.add(entry);
     }
     private void sortOrganisms() {
         organisms.sort((left, right) -> {
@@ -138,11 +135,13 @@ public class World {
             writeEvent("This is " + organisms.elementAt(i).getName() + "'s turn.", Color.lightGray);
             organisms.elementAt(i).action();
             draw(terrain);
-//            try {
-//                TimeUnit.MILLISECONDS.sleep(100);
-//            } catch (Exception e) {
-//                System.err.println(e);
-//            }
+            window.repaint();
+            window.revalidate();
+            try {
+//                wait(1000);
+            } catch (Exception e) {
+                System.err.println(e);
+            }
             removeDeadOrganisms();
         }
     }

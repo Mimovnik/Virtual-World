@@ -95,7 +95,7 @@ public abstract class Animal extends Organism {
         }
     }
 
-    private void breed(Organism partner) {
+    protected void breed(Organism partner) {
         moveBack();
         if((int) (random() * 2) == 0){
             return;
