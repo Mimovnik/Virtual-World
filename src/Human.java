@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Math.random;
 
@@ -12,6 +13,8 @@ public class Human extends Animal {
     JLabel inputHints;
     KeyListener keyListener;
     direction dir;
+
+    CountDownLatch latch;
 
     Human(World world) {
         super(world, 5, 4, "Human");
@@ -43,6 +46,7 @@ public class Human extends Animal {
 
         world.window.gui.add(inputHints);
         keyListener = new KeyListener() {
+
             @Override
             public void keyTyped(KeyEvent keyEvent) {
 
@@ -50,7 +54,9 @@ public class Human extends Animal {
 
             @Override
             public void keyPressed(KeyEvent keyEvent) {
-
+                if(latch == null){
+                    return;
+                }
                 switch (keyEvent.getKeyCode()) {
                     // Arrow left
                     case 37:
@@ -66,10 +72,14 @@ public class Human extends Animal {
                         break;
                     // Arrow down
                     case 40:
-                        dir= direction.DOWN;
+                        dir = direction.DOWN;
                         break;
                 }
-                if(keyEvent.getKeyChar() == 'e' && !abilityActive && !abilityOnCooldown){
+                boolean abilityKeyPressed = keyEvent.getKeyChar() == 'e';
+                if( dir != direction.NOWHERE){
+                    latch.countDown();
+                }
+                if (abilityKeyPressed && !abilityActive && !abilityOnCooldown) {
                     abilityActive = true;
                 }
             }
@@ -147,6 +157,13 @@ public class Human extends Animal {
         }
         inputHints.setText(hint);
 
+        try {
+            latch = new CountDownLatch(1);
+            latch.await();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         return dir;
     }
 
@@ -154,8 +171,9 @@ public class Human extends Animal {
     protected Animal giveBirth() {
         return new Human(world);
     }
+
     @Override
-    protected void die(){
+    protected void die() {
         dead = true;
         world.window.gui.remove(inputHints);
     }

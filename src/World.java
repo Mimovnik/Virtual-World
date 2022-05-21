@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.Vector;
 
 import static java.lang.Math.random;
@@ -90,11 +91,69 @@ public class World {
 
     private void wipeCells() {
         for (int i = 0; i < cells.length; i++) {
+            int finalI = i;
             cells[i] = new JLabel();
             cells[i].setBackground(Color.lightGray);
             cells[i].setForeground(Color.white);
             cells[i].setOpaque(true);
             cells[i].setHorizontalAlignment(JLabel.CENTER);
+
+
+            JPopupMenu menu = new JPopupMenu("Add an organism");
+            JMenuItem one = new JMenu("1");
+            JMenuItem two = new JMenu("2");
+            JMenuItem three = new JMenu("3");
+            JMenuItem four = new JMenu("4");one.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    System.out.println(finalI + " cell has been clicked;");
+                }
+            });
+            two.addActionListener(actionEvent -> {
+                cells[finalI].setBackground(Color.black);
+            });
+            menu.add(one);
+            menu.add(two);
+            menu.add(three);
+            menu.add(four);
+
+            cells[i].addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e){
+                    menu.show(cells[finalI], e.getX(), e.getY());
+                }
+            });
+
+
+            window.add(menu);
+
+//            int finalI = i;
+//            cells[i].addMouseListener(new MouseListener() {
+//                @Override
+//                public void mouseClicked(MouseEvent mouseEvent) {
+//
+//                }
+//
+//                @Override
+//                public void mousePressed(MouseEvent mouseEvent) {
+//
+//                }
+//
+//                @Override
+//                public void mouseReleased(MouseEvent mouseEvent) {
+//
+//                }
+//
+//                @Override
+//                public void mouseEntered(MouseEvent mouseEvent) {
+//                        cells[finalI].setBackground(Color.white);
+//                }
+//
+//                @Override
+//                public void mouseExited(MouseEvent mouseEvent) {
+//
+//                    cells[finalI].setBackground(Color.lightGray);
+//                }
+//            });
         }
     }
 
@@ -136,11 +195,6 @@ public class World {
             draw(terrain);
             window.repaint();
             window.revalidate();
-            try {
-//                wait(1000);
-            } catch (Exception e) {
-                System.err.println(e);
-            }
             removeDeadOrganisms();
         }
     }

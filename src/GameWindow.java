@@ -125,7 +125,15 @@ public class GameWindow extends JFrame {
             nextTurnButton.setEnabled(true);
             nextTurnButton.addActionListener(actionEvent1 -> {
                 nextTurnButton.setEnabled(false);
-                startTurn();
+
+                Runnable startingTurn = new Runnable() {
+                    @Override
+                    public void run() {
+                        startTurn();
+                    }
+                };
+                Thread turn = new Thread(startingTurn, "STARTING TURN THREAD");
+                turn.start();
                 nextTurnButton.setEnabled(true);
             });
 
