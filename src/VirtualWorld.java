@@ -1,3 +1,4 @@
+import static java.lang.Math.random;
 
 public class VirtualWorld {
     public static void main(String[] args) {

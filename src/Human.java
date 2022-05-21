@@ -10,4 +10,8 @@ public class Human extends Animal {
         setSkin(skin);
     }
 
+    @Override
+    protected Animal giveBirth(){
+        return new Human(world);
+    }
 }

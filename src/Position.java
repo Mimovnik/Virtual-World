@@ -56,4 +56,8 @@ public class Position {
         return rescale(ratio);
     }
 
+    public boolean equals(Position other){
+        return x == other.x && y == other.y;
+    }
+
 }

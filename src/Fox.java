@@ -9,4 +9,8 @@ public class Fox extends  Animal{
         skin.setText("F");
         setSkin(skin);
     }
+    @Override
+    protected Animal giveBirth(){
+        return new Fox(world);
+    }
 }

@@ -9,4 +9,8 @@ public class Wolf extends Animal{
         skin.setText("W");
         setSkin(skin);
     }
+    @Override
+    protected Animal giveBirth(){
+        return new Wolf(world);
+    }
 }

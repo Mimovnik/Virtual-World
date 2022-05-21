@@ -12,8 +12,8 @@ public class World {
     private int width, height;
     private Vector<Organism> organisms;
     private JLabel[] cells;
-    private int turnCount;
 
+    public JPanel combatLog;
     private JLabel getCell(int x, int y) {
         if (x > width || x < 0) {
             throw new RuntimeException("Bad x coordinate in getCell()");
@@ -52,9 +52,11 @@ public class World {
         }
     }
 
-    public World(int width, int height) {
+    public World(int width, int height, JPanel combatLog) {
         this.width = width;
         this.height = height;
+        this.combatLog = combatLog;
+
         cells = new JLabel[width * height];
         wipeCells();
         // Organism density on terrain in %
@@ -63,6 +65,7 @@ public class World {
 
         organisms = new Vector<>();
         organisms.addElement(new Human(this));
+
         for (int i = 0; i < organismsNumber; i++) {
             int whichOne = (int) (random() * 10);
             switch (whichOne) {
@@ -99,37 +102,61 @@ public class World {
             }
         }
     }
-
     public void draw(JPanel terrain) {
         renderCells(terrain);
         terrain.repaint();
         terrain.revalidate();
     }
+    public void writeEvent(String event, Color color){
+        JLabel entry = new JLabel(event);
+        entry.setPreferredSize(new Dimension(200, 15));
+        entry.setFont(new Font("Noto Sans", Font.PLAIN, 10));
+        if(color != null) {
+            entry.setOpaque(true);
+            entry.setBackground(color);
+        }
+        combatLog.add(entry);
+    }
     private void sortOrganisms() {
-        Collections.sort(organisms, (left, right) -> {
+        organisms.sort((left, right) -> {
             if (left.initiative != right.initiative) {
                 return right.initiative - left.initiative;
             }
             return left.birthDate - right.birthDate;
         });
     }
-
-    public void makeActions(JPanel terrain) {
-        sortOrganisms();
-        for (int i = 0; i < organisms.size(); i++) {
-            organisms.elementAt(i).action();
-            draw(terrain);
-            try {
-                TimeUnit.MILLISECONDS.sleep(0);
-            } catch (Exception e) {
-                System.err.println(e);
+    private void removeDeadOrganisms(){
+        for(int i = 0; i < organisms.size(); i++){
+            if(organisms.elementAt(i).isDead()){
+                organisms.removeElementAt(i);
             }
         }
     }
-
+    public void makeActions(JPanel terrain) {
+        sortOrganisms();
+        for (int i = 0; i < organisms.size(); i++) {
+            writeEvent("This is " + organisms.elementAt(i).getName() + "'s turn.", Color.lightGray);
+            organisms.elementAt(i).action();
+            draw(terrain);
+//            try {
+//                TimeUnit.MILLISECONDS.sleep(100);
+//            } catch (Exception e) {
+//                System.err.println(e);
+//            }
+            removeDeadOrganisms();
+        }
+    }
+    Organism getColliderWith(Organism attacker){
+        for(int i = 0; i < organisms.size();i++) {
+            if (attacker.getBirthDate() != organisms.elementAt(i).getBirthDate() && attacker.getPos().equals(organisms.elementAt(i).getPos())) {
+                return organisms.elementAt(i);
+            }
+        }
+        return null;
+    }
     public Position getRandomEmptyPos() {
         if (organisms.size() >= width * height) {
-            throw new RuntimeException("Couldn't find random empty position due to full world");
+            return null;
         }
         Position pos = new Position((int) (random() * width), (int) (random() * height));
         for (int i = 0; i < organisms.size(); i++) {
@@ -164,5 +191,20 @@ public class World {
 
     public int getHeight() {
         return height;
+    }
+
+    public Organism getOrganismByPos(Position position) {
+        for(int i = 0; i < organisms.size(); i++){
+            if(organisms.elementAt(i).getPos().equals(position)){
+                return organisms.elementAt(i);
+            }
+        }
+        return null;
+    }
+
+    public void addOrganism(Animal newborn, Position birthPos) {
+        newborn.setPos(birthPos);
+        newborn.stun();
+        organisms.addElement(newborn);
     }
 }

@@ -9,4 +9,8 @@ public class Antelope extends Animal{
         skin.setText("A");
         setSkin(skin);
     }
+    @Override
+    protected Animal giveBirth(){
+        return new Antelope(world);
+    }
 }

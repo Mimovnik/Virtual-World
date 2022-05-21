@@ -9,4 +9,8 @@ public class Sheep extends  Animal{
         skin.setText("S");
         setSkin(skin);
     }
+    @Override
+    protected Animal giveBirth(){
+        return new Sheep(world);
+    }
 }

@@ -39,11 +39,13 @@ public class GameWindow extends JFrame {
 
         combatLog = new JPanel();
         combatLog.setLayout(new FlowLayout(FlowLayout.CENTER));
-        combatLog.setPreferredSize(new Dimension(200, 20000));
+        combatLog.setPreferredSize(new Dimension(200, 200000));
         combatLog.setBackground(new Color(203, 203, 203));
 
         JLabel header = new JLabel("Combat log:");
-        header.setPreferredSize(new Dimension(100, 40));
+        header.setPreferredSize(new Dimension(200, 40));
+        header.setOpaque(true);
+        header.setBackground(new Color(109,109,109));
         header.setFont(new Font("Noto Sans", Font.PLAIN, 14));
         combatLog.add(header);
 
@@ -103,7 +105,7 @@ public class GameWindow extends JFrame {
                 return;
             }
             createGrid(width, height);
-            world = new World(width, height);
+            world = new World(width, height, combatLog);
             world.renderCells(terrain);
             worldSizeQuery.remove(widthField);
             worldSizeQuery.remove(heightField);
@@ -142,10 +144,22 @@ public class GameWindow extends JFrame {
 
     private void draw() {
         world.draw(terrain);
+        repaint();
+        revalidate();
+    }
+
+    private void newTurnHeader(){
+        JLabel header = new JLabel("Turn "+ turnCounter + " :");
+        header.setPreferredSize(new Dimension(200, 20));
+        header.setFont(new Font("Noto Sans", Font.PLAIN, 14));
+        header.setOpaque(true);
+        header.setBackground(new Color(129,129,129));
+        combatLog.add(header);
     }
 
     public void startTurn() {
         updateTurnCounter();
+        newTurnHeader();
         draw();
         world.makeActions(terrain);
         draw();
