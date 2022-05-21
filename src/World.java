@@ -109,7 +109,7 @@ public class World {
     }
     public void writeEvent(String event, Color color){
         JLabel entry = new JLabel(event);
-        entry.setPreferredSize(new Dimension(200, 15));
+        entry.setPreferredSize(new Dimension(300, 15));
         entry.setFont(new Font("Noto Sans", Font.PLAIN, 10));
         if(color != null) {
             entry.setOpaque(true);

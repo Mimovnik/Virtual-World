@@ -1,5 +1,3 @@
-import java.awt.*;
-
 import static java.lang.Math.random;
 
 public abstract class Animal extends Organism {

@@ -13,7 +13,7 @@ public class GameWindow extends JFrame {
     GameWindow() {
         this.setTitle("virtualWorld- Jakub Kwidziński 188647");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(701, 629);
+        this.setSize(801, 629);
         this.setVisible(true);
         this.setResizable(true);
         this.setLocationRelativeTo(null);
@@ -26,7 +26,7 @@ public class GameWindow extends JFrame {
 
         gui = new JPanel();
         gui.setLayout(new FlowLayout(FlowLayout.CENTER));
-        gui.setPreferredSize(new Dimension(700, 100));
+        gui.setPreferredSize(new Dimension(800, 100));
         gui.setBackground(new Color(35, 158, 213));
         nextTurnButton = new JButton();
         nextTurnButton.setEnabled(false);
@@ -39,11 +39,11 @@ public class GameWindow extends JFrame {
 
         combatLog = new JPanel();
         combatLog.setLayout(new FlowLayout(FlowLayout.CENTER));
-        combatLog.setPreferredSize(new Dimension(200, 200000));
+        combatLog.setPreferredSize(new Dimension(300, 200000));
         combatLog.setBackground(new Color(203, 203, 203));
 
         JLabel header = new JLabel("Combat log:");
-        header.setPreferredSize(new Dimension(200, 40));
+        header.setPreferredSize(new Dimension(300, 40));
         header.setOpaque(true);
         header.setBackground(new Color(109,109,109));
         header.setFont(new Font("Noto Sans", Font.PLAIN, 14));
@@ -150,7 +150,7 @@ public class GameWindow extends JFrame {
 
     private void newTurnHeader(){
         JLabel header = new JLabel("Turn "+ turnCounter + " :");
-        header.setPreferredSize(new Dimension(200, 20));
+        header.setPreferredSize(new Dimension(300, 20));
         header.setFont(new Font("Noto Sans", Font.PLAIN, 14));
         header.setOpaque(true);
         header.setBackground(new Color(129,129,129));
