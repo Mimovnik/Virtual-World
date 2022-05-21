@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class GameWindow extends JFrame {
     private World world;
@@ -125,9 +126,8 @@ public class GameWindow extends JFrame {
             nextTurnButton.setEnabled(true);
             nextTurnButton.addActionListener(actionEvent1 -> {
                 nextTurnButton.setEnabled(false);
-
-                Thread turn = new Thread(this::startTurn, "STARTING TURN THREAD");
-                turn.start();
+                startTurn();
+                nextTurnButton.setEnabled(true);
             });
 
         });
@@ -172,6 +172,5 @@ public class GameWindow extends JFrame {
         draw();
         world.makeActions(terrain);
         draw();
-        nextTurnButton.setEnabled(true);
     }
 }

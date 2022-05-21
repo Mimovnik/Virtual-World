@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import java.util.Vector;
 
 import static java.lang.Math.random;
@@ -167,15 +168,28 @@ public class World {
         }
     }
     public void makeActions(JPanel terrain) {
-        sortOrganisms();
-        for (int i = 0; i < organisms.size(); i++) {
-            writeEvent("This is " + organisms.elementAt(i).getName() + "'s turn.", Color.lightGray);
-            organisms.elementAt(i).action();
-            draw(terrain);
-            removeDeadOrganisms();
-            window.repaint();
-            window.revalidate();
-        }
+        SwingWorker<Void, String> actions= new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                sortOrganisms();
+                for (int i = 0; i < organisms.size(); i++) {
+                    writeEvent("This is " + organisms.elementAt(i).getName() + "'s turn.", Color.lightGray);
+                    organisms.elementAt(i).action();
+                    removeDeadOrganisms();
+                    publish("Repaint");
+                }
+                return null;
+            }
+            @Override
+            protected void process(List<String> chunks) {
+                if(!chunks.isEmpty()){
+                    draw(terrain);
+                    window.repaint();
+                    window.revalidate();
+                }
+            }
+        };
+        actions.execute();
     }
     Organism getColliderWith(Organism attacker){
         for(int i = 0; i < organisms.size();i++) {
