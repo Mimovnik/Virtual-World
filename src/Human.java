@@ -30,6 +30,18 @@ public class Human extends Animal {
         inputHints.setBackground(Color.green);
         inputHints.setPreferredSize(new Dimension(400, 50));
         inputHints.setFont(new Font("Noto Sans", Font.PLAIN, 10));
+
+        String hint = "You're a human [H], arrows- movement";
+        if (abilityActive) {
+            hint += ", ability is active for next " + (5 - abilityTurns) + " turns.";
+        } else if (abilityOnCooldown) {
+            hint += ", ability is on cooldown for next " + abilityTurns + " turns.";
+        } else {
+            hint += ", e- activate a special ability.";
+        }
+        inputHints.setText(hint);
+
+        world.window.gui.add(inputHints);
         keyListener = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
@@ -57,6 +69,9 @@ public class Human extends Animal {
                         dir= direction.DOWN;
                         break;
                 }
+                if(keyEvent.getKeyChar() == 'e' && !abilityActive && !abilityOnCooldown){
+                    abilityActive = true;
+                }
             }
 
             @Override
@@ -71,7 +86,6 @@ public class Human extends Animal {
         if (isDead()) {
             return;
         }
-        world.window.gui.add(inputHints);
 
         attackedThisTurn = false;
         if (stunned) {
@@ -79,8 +93,8 @@ public class Human extends Animal {
             return;
         }
 
-        moveRange = 1;
         direction dir = getDirection();
+        moveRange = 1;
         world.window.repaint();
         world.window.revalidate();
 
@@ -119,7 +133,6 @@ public class Human extends Animal {
                 collide(defender);
             }
         }
-        world.window.gui.remove(inputHints);
     }
 
     @Override
@@ -134,12 +147,16 @@ public class Human extends Animal {
         }
         inputHints.setText(hint);
 
-
         return dir;
     }
 
     @Override
     protected Animal giveBirth() {
         return new Human(world);
+    }
+    @Override
+    protected void die(){
+        dead = true;
+        world.window.gui.remove(inputHints);
     }
 }

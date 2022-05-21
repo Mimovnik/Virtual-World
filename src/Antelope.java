@@ -11,6 +11,8 @@ public class Antelope extends Animal {
         skin.setBackground(new Color(238, 182, 95));
         skin.setText("A");
         setSkin(skin);
+
+        moveRange = 2;
     }
 
     @Override

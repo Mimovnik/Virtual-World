@@ -17,7 +17,6 @@ public class World {
         this.window = window;
 
         cells = new JLabel[width * height];
-        wipeCells();
         // Organism density on terrain in %
         int organismDensity = 10;
         int organismsNumber = organismDensity * width * height / 100;
@@ -26,7 +25,7 @@ public class World {
         organisms.addElement(new Human(this));
 
         for (int i = 0; i < organismsNumber; i++) {
-            int whichOne = (int) (random() * 10);
+            int whichOne = (int) (random() * 9);
             switch (whichOne) {
                 case 0:
                     organisms.addElement(new Antelope(this));
@@ -43,21 +42,21 @@ public class World {
                 case 4:
                     organisms.addElement(new Wolf(this));
                     break;
-//                case 5:
-//                    organisms.push_back(new Dandelion(this));
-//                    break;
-//                case 6:
-//                    organisms.push_back(new Grass(this));
-//                    break;
-//                case 7:
-//                    organisms.push_back(new Guarana(this));
-//                    break;
-//                case 8:
-//                    organisms.push_back(new PineBorscht(this));
-//                    break;
-//                case 9:
-//                    organisms.push_back(new Wolfberry(this));
-//                    break;
+                case 5:
+                    organisms.addElement(new Dandelion(this));
+                    break;
+                case 6:
+                    organisms.addElement(new Grass(this));
+                    break;
+                case 7:
+                    organisms.addElement(new Guarana(this));
+                    break;
+                case 8:
+                    organisms.addElement(new SosnowskysHogweed(this));
+                    break;
+                case 9:
+                    organisms.addElement(new Wolfberry(this));
+                    break;
             }
         }
     }
@@ -154,9 +153,6 @@ public class World {
         return null;
     }
     public Position getRandomEmptyPos() {
-        if (organisms.size() >= width * height) {
-            return null;
-        }
         Position pos = new Position((int) (random() * width), (int) (random() * height));
         for (int i = 0; i < organisms.size(); i++) {
             if (pos.equals(organisms.elementAt(i).getPos())) {
@@ -201,7 +197,7 @@ public class World {
         return null;
     }
 
-    public void addOrganism(Animal newborn, Position birthPos) {
+    public void addOrganism(Organism newborn, Position birthPos) {
         newborn.setPos(birthPos);
         newborn.stun();
         organisms.addElement(newborn);

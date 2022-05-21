@@ -39,6 +39,11 @@ public abstract class Organism {
         return strength;
     }
 
+    protected void buff(int additionalStrength) {
+        strength += additionalStrength;
+        world.writeEvent(getName() + " got +" + additionalStrength + " strength. Total(" + getStrength() + ").", Color.green);
+    }
+
     protected enum direction {
         NOWHERE,
         LEFT,
@@ -68,15 +73,6 @@ public abstract class Organism {
         last = new Position(current);
     }
 
-    public int compareTo(Organism other) {
-        if (initiative != other.initiative) {
-            if (initiative > other.initiative) return 1;
-            else return 0;
-        }
-        if (birthDate < other.birthDate) return 1;
-        else return 0;
-    }
-
     public Organism(World world, int strength, int initiative, String name) {
         counter++;
         this.name = name;
@@ -86,9 +82,7 @@ public abstract class Organism {
         this.strength = strength;
         this.initiative = initiative;
         this.current = world.getRandomEmptyPos();
-        if(current != null){
-            this.last = new Position(current);
-        }
+        this.last = new Position(current);
         this.birthDate = counter;
     }
 
