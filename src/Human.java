@@ -22,7 +22,6 @@ public class Human extends Animal {
         skin.setBackground(new Color(255, 195, 170));
         skin.setText("H");
         setSkin(skin);
-        dir = direction.LEFT;
 
         abilityActive = false;
         abilityOnCooldown = false;
@@ -30,7 +29,7 @@ public class Human extends Animal {
 
         inputHints = new JLabel();
         inputHints.setOpaque(true);
-        inputHints.setBackground(Color.green);
+        inputHints.setBackground(new Color(81, 144, 173));
         inputHints.setPreferredSize(new Dimension(400, 50));
         inputHints.setFont(new Font("Noto Sans", Font.PLAIN, 10));
 
@@ -44,6 +43,7 @@ public class Human extends Animal {
 
             @Override
             public void keyPressed(KeyEvent keyEvent) {
+                dir = direction.NOWHERE;
                 if(latch == null){
                     return;
                 }

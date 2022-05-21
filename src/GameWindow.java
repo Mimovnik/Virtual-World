@@ -4,7 +4,7 @@ import java.util.List;
 
 public class GameWindow extends JFrame {
     private World world;
-    private final JButton nextTurnButton;
+    public final JButton nextTurnButton;
     public JPanel gui;
     public JPanel combatLog;
     private JLabel turnCounterDisplay;
@@ -127,7 +127,6 @@ public class GameWindow extends JFrame {
             nextTurnButton.addActionListener(actionEvent1 -> {
                 nextTurnButton.setEnabled(false);
                 startTurn();
-                nextTurnButton.setEnabled(true);
             });
 
         });

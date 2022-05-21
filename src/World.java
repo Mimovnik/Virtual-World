@@ -162,6 +162,11 @@ public class World {
                 }
                 chunks.forEach(World.this::writeEvent);
             }
+
+            @Override
+            protected void done() {
+                window.nextTurnButton.setEnabled(true);
+            }
         };
         actions.execute();
     }
