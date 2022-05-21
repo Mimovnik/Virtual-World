@@ -39,9 +39,8 @@ public class GameWindow extends JFrame {
 
         combatLog = new JPanel();
         combatLog.setLayout(new FlowLayout(FlowLayout.CENTER));
-        combatLog.setPreferredSize(new Dimension(300, 200000));
+        combatLog.setPreferredSize(new Dimension(300, 6000));
         combatLog.setBackground(new Color(203, 203, 203));
-
         JLabel header = new JLabel("Combat log:");
         header.setPreferredSize(new Dimension(300, 40));
         header.setOpaque(true);
@@ -92,7 +91,7 @@ public class GameWindow extends JFrame {
         submit.setPreferredSize(new Dimension(100, 20));
         submit.setFocusable(false);
         submit.addActionListener(actionEvent -> {
-            int width = 0, height = 0;
+            int width, height;
             try {
                 width = Integer.parseInt(widthField.getText());
                 height = Integer.parseInt(heightField.getText());
@@ -148,18 +147,27 @@ public class GameWindow extends JFrame {
         revalidate();
     }
 
-    private void newTurnHeader(){
-        JLabel header = new JLabel("Turn "+ turnCounter + " :");
-        header.setPreferredSize(new Dimension(300, 20));
-        header.setFont(new Font("Noto Sans", Font.PLAIN, 14));
+    private void resetCombatLog(){
+        combatLog.removeAll();
+
+        JLabel header = new JLabel("Combat log:");
+        header.setPreferredSize(new Dimension(300, 40));
         header.setOpaque(true);
-        header.setBackground(new Color(129,129,129));
+        header.setBackground(new Color(109,109,109));
+        header.setFont(new Font("Noto Sans", Font.PLAIN, 14));
         combatLog.add(header);
+        
+        JLabel turnHeader = new JLabel("Turn "+ turnCounter + " :");
+        turnHeader.setPreferredSize(new Dimension(300, 20));
+        turnHeader.setFont(new Font("Noto Sans", Font.PLAIN, 14));
+        turnHeader.setOpaque(true);
+        turnHeader.setBackground(new Color(129,129,129));
+        combatLog.add(turnHeader);
     }
 
     public void startTurn() {
         updateTurnCounter();
-        newTurnHeader();
+        resetCombatLog();
         draw();
         world.makeActions(terrain);
         draw();
