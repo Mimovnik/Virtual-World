@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Organism {
     protected JLabel skin;
@@ -13,7 +15,7 @@ public abstract class Organism {
     protected boolean stunned;
     protected boolean dead;
     protected static int counter = 0;
-
+    protected List<OrganismEvent> events = new ArrayList<>();
     public boolean isDead() {
         return dead;
     }
@@ -41,7 +43,7 @@ public abstract class Organism {
 
     protected void buff(int additionalStrength) {
         strength += additionalStrength;
-        world.writeEvent(getName() + " got +" + additionalStrength + " strength. Total(" + getStrength() + ").", Color.green);
+        events.add(new OrganismEvent(getName() + " got +" + additionalStrength + " strength. Total(" + getStrength() + ").", Color.green));
     }
 
     protected enum direction {
@@ -86,7 +88,14 @@ public abstract class Organism {
         this.birthDate = counter;
     }
 
-    public abstract void action();
+    protected abstract void action();
+
+    public List<OrganismEvent> act(){
+        action();
+        ArrayList<OrganismEvent> currentEvents = new ArrayList<>(events);
+        events.clear();
+        return currentEvents;
+    }
 
     public boolean isStronger(Organism other) {
         return strength >= other.strength;
@@ -105,5 +114,4 @@ public abstract class Organism {
     public JLabel getSkin() {
         return skin;
     }
-
 }

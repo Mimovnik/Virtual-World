@@ -82,7 +82,7 @@ public class Human extends Animal {
     }
 
     @Override
-    public void action() {
+    protected void action() {
         if (isDead()) {
             return;
         }
@@ -104,7 +104,7 @@ public class Human extends Animal {
                 moveRange = 2;
             } else {
                 if ((int) (random() * 2) == 0) {
-                    world.writeEvent("Human lucky", Color.green);
+                    events.add(new OrganismEvent("Human lucky", Color.green));
                     moveRange = 2;
                 }
             }
@@ -129,7 +129,7 @@ public class Human extends Animal {
                     return;
                 }
                 attackedThisTurn = true;
-                world.writeEvent(getName() + " attacks " + defender.getName(), null);
+                events.add(new OrganismEvent(getName() + " attacks " + defender.getName(), null));
                 collide(defender);
             }
         }
@@ -141,7 +141,7 @@ public class Human extends Animal {
         if (abilityActive) {
             hint += ", ability is active for next " + (5 - abilityTurns) + " turns.";
         } else if (abilityOnCooldown) {
-            hint += ", ability is on cooldown for next " + abilityTurns + " turns.";
+            hint += ", ability is on cool down for next " + abilityTurns + " turns.";
         } else {
             hint += ", e- activate a special ability.";
         }

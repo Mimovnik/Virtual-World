@@ -105,35 +105,6 @@ public class World {
 
 
             window.add(menu);
-
-//            int finalI = i;
-//            cells[i].addMouseListener(new MouseListener() {
-//                @Override
-//                public void mouseClicked(MouseEvent mouseEvent) {
-//
-//                }
-//
-//                @Override
-//                public void mousePressed(MouseEvent mouseEvent) {
-//
-//                }
-//
-//                @Override
-//                public void mouseReleased(MouseEvent mouseEvent) {
-//
-//                }
-//
-//                @Override
-//                public void mouseEntered(MouseEvent mouseEvent) {
-//                        cells[finalI].setBackground(Color.white);
-//                }
-//
-//                @Override
-//                public void mouseExited(MouseEvent mouseEvent) {
-//
-//                    cells[finalI].setBackground(Color.lightGray);
-//                }
-//            });
         }
     }
 
@@ -142,13 +113,13 @@ public class World {
         terrain.repaint();
         terrain.revalidate();
     }
-    public void writeEvent(String event, Color color){
-        JLabel entry = new JLabel(event);
+    private void writeEvent(OrganismEvent event){
+        JLabel entry = new JLabel(event.description);
         entry.setPreferredSize(new Dimension(300, 15));
         entry.setFont(new Font("Noto Sans", Font.PLAIN, 10));
-        if(color != null) {
+        if(event.color != null) {
             entry.setOpaque(true);
-            entry.setBackground(color);
+            entry.setBackground(event.color);
         }
         window.combatLog.add(entry);
     }
@@ -168,25 +139,28 @@ public class World {
         }
     }
     public void makeActions(JPanel terrain) {
-        SwingWorker<Void, String> actions= new SwingWorker<Void, String>() {
+        SwingWorker<Void, OrganismEvent> actions= new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
                 sortOrganisms();
                 for (int i = 0; i < organisms.size(); i++) {
-                    writeEvent("This is " + organisms.elementAt(i).getName() + "'s turn.", Color.lightGray);
-                    organisms.elementAt(i).action();
+                    publish(new OrganismEvent("This is " + organisms.elementAt(i).getName() + "'s turn.", Color.lightGray));
+                    List<OrganismEvent> events = organisms.elementAt(i).act();
+                    events.forEach(this::publish);
+                    Thread.sleep(100, 0);
                     removeDeadOrganisms();
-                    publish("Repaint");
                 }
                 return null;
             }
+
             @Override
-            protected void process(List<String> chunks) {
-                if(!chunks.isEmpty()){
+            protected void process(List<OrganismEvent> chunks) {
+                if (!chunks.isEmpty()) {
                     draw(terrain);
                     window.repaint();
                     window.revalidate();
                 }
+                chunks.forEach(World.this::writeEvent);
             }
         };
         actions.execute();

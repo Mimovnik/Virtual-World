@@ -1,3 +1,5 @@
+import java.util.Random;
+
 import static java.lang.Math.random;
 
 public abstract class Animal extends Organism {
@@ -44,11 +46,12 @@ public abstract class Animal extends Organism {
                 moveEvent += " tries to move down but hits a wall.";
                 break;
         }
-        world.writeEvent(moveEvent, null);
+        events.add(new OrganismEvent(moveEvent));
     }
 
     protected direction getDirection() {
-        int rnd = (int) (random() * 4);
+        Random ran = new Random();
+        int rnd = ran.nextInt(4);
         switch (rnd) {
             case 0:
                 return direction.UP;
@@ -64,12 +67,12 @@ public abstract class Animal extends Organism {
 
     @Override
     protected void takeHit(Organism attacker) {
-        world.writeEvent(getName() + " took a hit from " + attacker.getName() + " and died.", null);
+        events.add(new OrganismEvent(getName() + " took a hit from " + attacker.getName() + " and died.", null));
         die();
     }
 
     @Override
-    public void action() {
+    protected void action() {
         if (dead) {
             return;
         }
@@ -89,7 +92,7 @@ public abstract class Animal extends Organism {
                     return;
                 }
                 attackedThisTurn = true;
-                world.writeEvent(getName() + " attacks " + defender.getName(), null);
+                events.add(new OrganismEvent(getName() + " attacks " + defender.getName()));
                 collide(defender);
             }
         }
@@ -97,7 +100,7 @@ public abstract class Animal extends Organism {
 
     protected void breed(Organism partner) {
         moveBack();
-        if((int) (random() * 2) == 0){
+        if ((int) (random() * 2) == 0) {
             return;
         }
         int nearX = (int) (random() * 3) - 1;
@@ -107,8 +110,8 @@ public abstract class Animal extends Organism {
                 || birthPos.getY() < 0 || birthPos.getY() >= world.getHeight()) {
             return;
         }
-        if(world.getOrganismByPos(birthPos) == null){
-            world.writeEvent(getName() + " have a baby with " + partner.getName() + ".", null);
+        if (world.getOrganismByPos(birthPos) == null) {
+            events.add(new OrganismEvent(getName() + " have a baby with " + partner.getName() + "."));
             world.addOrganism(giveBirth(), birthPos);
         }
     }

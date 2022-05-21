@@ -37,10 +37,10 @@ public class Turtle extends  Animal{
     @Override
     protected void takeHit(Organism attacker){
         if(attacker.getStrength() < 5 && !attackedThisTurn){
-            world.writeEvent(getName() + " resisted a hit from " + attacker.getName() + ".", null);
+            events.add(new OrganismEvent(getName() + " resisted a hit from " + attacker.getName() + ".", null));
             attacker.moveBack();
         }else{
-            world.writeEvent(getName() + " took a hit from " + attacker.getName() + " and died.", null);
+            events.add(new OrganismEvent(getName() + " took a hit from " + attacker.getName() + " and died.", null));
             die();
         }
     }

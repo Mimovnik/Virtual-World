@@ -17,7 +17,7 @@ public class Guarana extends Plant{
 
     @Override
     protected void takeHit(Organism attacker){
-        world.writeEvent(getName() + " got eaten by " + attacker.getName() + ".", null);
+        events.add(new OrganismEvent(getName() + " got eaten by " + attacker.getName() + ".", null));
         die();
         attacker.buff(3);
     }

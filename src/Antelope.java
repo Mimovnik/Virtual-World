@@ -71,10 +71,10 @@ public class Antelope extends Animal {
     @Override
     protected void takeHit(Organism attacker) {
         if ((int) (random() * 2) == 0) {
-            world.writeEvent(getName() + " escapes from a fight with " + attacker.getName() + ".", null);
+            events.add(new OrganismEvent(getName() + " escapes from a fight with " + attacker.getName() + ".", null));
             escape();
         } else {
-            world.writeEvent(getName() + " took a hit from " + attacker.getName() + " and died.", null);
+            events.add(new OrganismEvent(getName() + " took a hit from " + attacker.getName() + " and died.", null));
             die();
         }
     }

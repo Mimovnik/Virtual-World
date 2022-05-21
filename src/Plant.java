@@ -1,5 +1,3 @@
-import javax.swing.*;
-
 import static java.lang.Math.random;
 
 public abstract class Plant extends Organism {
@@ -7,7 +5,7 @@ public abstract class Plant extends Organism {
 
     @Override
     protected void takeHit(Organism attacker) {
-        world.writeEvent(getName() + " got eaten by " + attacker.getName() + ".", null);
+        events.add(new OrganismEvent(getName() + " got eaten by " + attacker.getName() + "."));
         die();
     }
 
@@ -20,7 +18,7 @@ public abstract class Plant extends Organism {
             return;
         }
         if(world.getOrganismByPos(sowPos) == null){
-            world.writeEvent(getName() + " is spreading.", null);
+            events.add(new OrganismEvent( getName() + " is spreading."));
             world.addOrganism(getSapling(), sowPos);
         }
     }
@@ -33,7 +31,7 @@ public abstract class Plant extends Organism {
     }
 
     @Override
-    public void action() {
+    protected void action() {
         if(dead){
             return;
         }
