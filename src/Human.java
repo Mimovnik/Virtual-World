@@ -14,7 +14,7 @@ public class Human extends Animal {
     KeyListener keyListener;
     direction dir;
 
-    CountDownLatch latch;
+    volatile CountDownLatch latch;
 
     Human(World world) {
         super(world, 5, 4, "Human");
@@ -34,17 +34,7 @@ public class Human extends Animal {
         inputHints.setPreferredSize(new Dimension(400, 50));
         inputHints.setFont(new Font("Noto Sans", Font.PLAIN, 10));
 
-        String hint = "You're a human [H], arrows- movement";
-        if (abilityActive) {
-            hint += ", ability is active for next " + (5 - abilityTurns) + " turns.";
-        } else if (abilityOnCooldown) {
-            hint += ", ability is on cooldown for next " + abilityTurns + " turns.";
-        } else {
-            hint += ", e- activate a special ability.";
-        }
-        inputHints.setText(hint);
 
-        world.window.gui.add(inputHints);
         keyListener = new KeyListener() {
 
             @Override
@@ -156,6 +146,7 @@ public class Human extends Animal {
             hint += ", e- activate a special ability.";
         }
         inputHints.setText(hint);
+        world.window.gui.add(inputHints);
 
         try {
             latch = new CountDownLatch(1);
@@ -164,6 +155,7 @@ public class Human extends Animal {
             throw new RuntimeException(e);
         }
 
+        world.window.gui.remove(inputHints);
         return dir;
     }
 
@@ -175,6 +167,5 @@ public class Human extends Animal {
     @Override
     protected void die() {
         dead = true;
-        world.window.gui.remove(inputHints);
     }
 }

@@ -6,7 +6,7 @@ public class VirtualWorld {
             GameWindow gameWindow = new GameWindow();
             gameWindow.initialize();
         } catch(Exception e){
-            System.err.println(e);
+            throw new RuntimeException(e);
         }
     }
 }

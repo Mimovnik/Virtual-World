@@ -61,26 +61,6 @@ public class World {
             }
         }
     }
-    private JLabel getCell(int x, int y) {
-        if (x > width || x < 0) {
-            throw new RuntimeException("Bad x coordinate in getCell()");
-        }
-        if (y > height || y < 0) {
-            throw new RuntimeException("Bad y coordinate in getCell()");
-        }
-        return cells[y * width + x];
-    }
-
-    private JLabel getCell(Position position) {
-        if (position.getX() > width || position.getX() < 0) {
-            throw new RuntimeException("Bad x coordinate in getCell()");
-        }
-        if (position.getY() > height || position.getY() < 0) {
-            throw new RuntimeException("Bad y coordinate in getCell()");
-        }
-        return cells[position.getY() * width + position.getX()];
-    }
-
     private void stampOrganismsOnCells() {
         for (int i = 0; i < organisms.size(); i++) {
             Position pos = organisms.elementAt(i).getPos();
@@ -88,7 +68,6 @@ public class World {
             cells[pos.getY() * width + pos.getX()].setBorder(BorderFactory.createLineBorder(Color.black, 1));
         }
     }
-
     private void wipeCells() {
         for (int i = 0; i < cells.length; i++) {
             int finalI = i;
@@ -193,9 +172,9 @@ public class World {
             writeEvent("This is " + organisms.elementAt(i).getName() + "'s turn.", Color.lightGray);
             organisms.elementAt(i).action();
             draw(terrain);
+            removeDeadOrganisms();
             window.repaint();
             window.revalidate();
-            removeDeadOrganisms();
         }
     }
     Organism getColliderWith(Organism attacker){

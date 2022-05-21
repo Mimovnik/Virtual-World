@@ -3,11 +3,11 @@ import java.awt.*;
 
 public class GameWindow extends JFrame {
     private World world;
-    private JButton nextTurnButton;
+    private final JButton nextTurnButton;
     public JPanel gui;
     public JPanel combatLog;
     private JLabel turnCounterDisplay;
-    private JPanel terrain;
+    private final JPanel terrain;
     private int turnCounter = 0;
 
     GameWindow() {
@@ -126,15 +126,8 @@ public class GameWindow extends JFrame {
             nextTurnButton.addActionListener(actionEvent1 -> {
                 nextTurnButton.setEnabled(false);
 
-                Runnable startingTurn = new Runnable() {
-                    @Override
-                    public void run() {
-                        startTurn();
-                    }
-                };
-                Thread turn = new Thread(startingTurn, "STARTING TURN THREAD");
+                Thread turn = new Thread(this::startTurn, "STARTING TURN THREAD");
                 turn.start();
-                nextTurnButton.setEnabled(true);
             });
 
         });
@@ -179,5 +172,6 @@ public class GameWindow extends JFrame {
         draw();
         world.makeActions(terrain);
         draw();
+        nextTurnButton.setEnabled(true);
     }
 }
